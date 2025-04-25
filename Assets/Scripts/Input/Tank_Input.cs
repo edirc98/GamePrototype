@@ -20,11 +20,14 @@ public class Tank_Input : MonoBehaviour
 
     private Vector3 rayHitPosition;
     private Vector3 turretLookDirection;
+
+    private bool _isShooting;
     #endregion
 
     #region PROPERTIES
     public Vector2 BodyMovementInput { get { return _bodyMovementInput; } }
     public Vector2 TurretMovementInput { get { return _turretMovementInput; } }
+    public bool IsShooting { get { return _isShooting; } }
     #endregion
 
     #region UNITY METHODS
@@ -32,6 +35,7 @@ public class Tank_Input : MonoBehaviour
     {
         _playerInput = GetComponent<PlayerInput>();
         _tankActions = new TankInputActions();
+        SubscribeInputEvents();
     }
     private void OnEnable()
     {
@@ -92,12 +96,25 @@ public class Tank_Input : MonoBehaviour
         }
 
     }
+    private void HandleTankTurretStartShooting(InputAction.CallbackContext context)
+    {
+        _isShooting = true;
+    }
+    private void HandleTankTurretStopShooting(InputAction.CallbackContext context)
+    {
+        _isShooting = false;
+    }
+
+    private void SubscribeInputEvents()
+    {
+        _tankActions.TankControl.TurretShoot.performed += HandleTankTurretStartShooting;
+        _tankActions.TankControl.TurretShoot.canceled += HandleTankTurretStopShooting;
+    }
 
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.yellow;
         Gizmos.DrawSphere(rayHitPosition, 0.5f);
-        
     }
 
     #endregion

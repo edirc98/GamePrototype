@@ -23,6 +23,9 @@ public class Tank_Controller : MonoBehaviour
     [Header("Turret Properties")]
     [SerializeField] private float _turretRotationalMovementSpeed = 5.0f;
 
+    [Header("Tank Weapon")]
+    [SerializeField] private TankWeaponSelector _weaponSelector;
+
     private Vector3 _moveDirection = Vector3.zero; 
     private Vector3 _turretLookDirection = Vector3.zero; 
     
@@ -38,6 +41,7 @@ public class Tank_Controller : MonoBehaviour
     {
         _input = GetComponent<Tank_Input>();
         _rigidbody = GetComponent<Rigidbody>();
+        _weaponSelector = GetComponent<TankWeaponSelector>();
     }
     void Start()
     {
@@ -48,19 +52,18 @@ public class Tank_Controller : MonoBehaviour
     {
         if (_input && _rigidbody) {
             HandleTankMovement();
+            HandleTankTurretShooting();
         }
     }
 
-
     #endregion
 
-    #region CUSTOM METHODS
+    #region TANK MOVEMENT
     private void HandleTankMovement()
     {
         HandleTankBodyMovement();
         HandleTankTurretMovement();
     }
-
     private void HandleTankBodyMovement()
     {
         _moveDirection = new Vector3(_input.BodyMovementInput.x, 0, _input.BodyMovementInput.y);
@@ -75,7 +78,6 @@ public class Tank_Controller : MonoBehaviour
             _rigidbody.MoveRotation(smoothRotation);
         }
     }
-
     private void HandleTankTurretMovement()
     {
         _turretLookDirection = new Vector3(_input.TurretMovementInput.x, 0, _input.TurretMovementInput.y);
@@ -86,9 +88,17 @@ public class Tank_Controller : MonoBehaviour
         }
 
     }
-
     #endregion
 
+    #region TANK SHOOTING
+    private void HandleTankTurretShooting()
+    {
+        if (_input.IsShooting && _weaponSelector.ActiveWeapon != null)
+        {
+            _weaponSelector.ActiveWeapon.Shoot();
+        }
+    }
+    #endregion
     #region DEBUG
     private void OnDrawGizmos()
     {

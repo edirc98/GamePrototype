@@ -53,6 +53,15 @@ public partial class @TankInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""TurretShoot"",
+                    ""type"": ""Button"",
+                    ""id"": ""2927e26f-93f5-4fe9-b2ee-a57bf11fc491"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": ""Press"",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -143,6 +152,28 @@ public partial class @TankInputActions: IInputActionCollection2, IDisposable
                     ""action"": ""TurretMovement_Stick"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f1b5a5cd-d8b1-41a7-8184-0da6284f22d9"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard+Mouse"",
+                    ""action"": ""TurretShoot"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""122accc4-1103-4a5e-adc0-0507152f1f40"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""TurretShoot"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -182,6 +213,7 @@ public partial class @TankInputActions: IInputActionCollection2, IDisposable
         m_TankControl_BodyMovement = m_TankControl.FindAction("BodyMovement", throwIfNotFound: true);
         m_TankControl_TurretMovement_Mouse = m_TankControl.FindAction("TurretMovement_Mouse", throwIfNotFound: true);
         m_TankControl_TurretMovement_Stick = m_TankControl.FindAction("TurretMovement_Stick", throwIfNotFound: true);
+        m_TankControl_TurretShoot = m_TankControl.FindAction("TurretShoot", throwIfNotFound: true);
     }
 
     ~@TankInputActions()
@@ -251,6 +283,7 @@ public partial class @TankInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_TankControl_BodyMovement;
     private readonly InputAction m_TankControl_TurretMovement_Mouse;
     private readonly InputAction m_TankControl_TurretMovement_Stick;
+    private readonly InputAction m_TankControl_TurretShoot;
     public struct TankControlActions
     {
         private @TankInputActions m_Wrapper;
@@ -258,6 +291,7 @@ public partial class @TankInputActions: IInputActionCollection2, IDisposable
         public InputAction @BodyMovement => m_Wrapper.m_TankControl_BodyMovement;
         public InputAction @TurretMovement_Mouse => m_Wrapper.m_TankControl_TurretMovement_Mouse;
         public InputAction @TurretMovement_Stick => m_Wrapper.m_TankControl_TurretMovement_Stick;
+        public InputAction @TurretShoot => m_Wrapper.m_TankControl_TurretShoot;
         public InputActionMap Get() { return m_Wrapper.m_TankControl; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -276,6 +310,9 @@ public partial class @TankInputActions: IInputActionCollection2, IDisposable
             @TurretMovement_Stick.started += instance.OnTurretMovement_Stick;
             @TurretMovement_Stick.performed += instance.OnTurretMovement_Stick;
             @TurretMovement_Stick.canceled += instance.OnTurretMovement_Stick;
+            @TurretShoot.started += instance.OnTurretShoot;
+            @TurretShoot.performed += instance.OnTurretShoot;
+            @TurretShoot.canceled += instance.OnTurretShoot;
         }
 
         private void UnregisterCallbacks(ITankControlActions instance)
@@ -289,6 +326,9 @@ public partial class @TankInputActions: IInputActionCollection2, IDisposable
             @TurretMovement_Stick.started -= instance.OnTurretMovement_Stick;
             @TurretMovement_Stick.performed -= instance.OnTurretMovement_Stick;
             @TurretMovement_Stick.canceled -= instance.OnTurretMovement_Stick;
+            @TurretShoot.started -= instance.OnTurretShoot;
+            @TurretShoot.performed -= instance.OnTurretShoot;
+            @TurretShoot.canceled -= instance.OnTurretShoot;
         }
 
         public void RemoveCallbacks(ITankControlActions instance)
@@ -329,5 +369,6 @@ public partial class @TankInputActions: IInputActionCollection2, IDisposable
         void OnBodyMovement(InputAction.CallbackContext context);
         void OnTurretMovement_Mouse(InputAction.CallbackContext context);
         void OnTurretMovement_Stick(InputAction.CallbackContext context);
+        void OnTurretShoot(InputAction.CallbackContext context);
     }
 }
